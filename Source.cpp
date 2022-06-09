@@ -15,11 +15,6 @@ using std::cout;
 using std::cin;
 using std::string;
 
-struct zodis {
-	string vardas;
-	std::vector <int> eilutes;
-};
-
 int main() {
 	std::stringstream bufferis;
 	try {
@@ -36,48 +31,16 @@ int main() {
 		return 0;
 	}
 	std::string input = "";
-	int eilute =1;
-	zodis temp;
-	std::multiset <string> sarasas;
-	std::regex re("[.%()\\]\\[$/0123456789\\|\\-,; \"\n :]");
-	std::vector<zodis> zodziai;
-	while (bufferis) {
-		if (!bufferis.eof()) {
-			std::getline(bufferis, input);
-			std::sregex_token_iterator first{ input.begin(), input.end(), re, -1 }, last;
-			std::vector<std::string> tokens{ first, last };
-			for (auto &t : tokens) {
-				std::for_each(t.begin(), t.end(), [](char& c) {
-					c = ::tolower(c);
-					});
-				for (auto &i : zodziai) {
-					if (t == i.vardas) { 
-						i.eilutes.push_back(eilute);
-						sarasas.insert(t);
-						goto loop;
-					}
-				}
-				temp.vardas = t;
-				temp.eilutes.push_back(eilute);
-				zodziai.push_back(temp);
-				temp.eilutes.clear();
-				sarasas.insert(t);
-	loop:
-				continue;
-			}
-			eilute++;
-		}
+	std::regex re("(?:(?:https?|ftp):\\/\\/)?[\\w/\\-?=%.]+\\.[\\w/\\-&?=%.]+"); //https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string?page=1&tab=scoredesc#tab-top
+	input = bufferis.str();
+	std::sregex_token_iterator first{ input.begin(), input.end(), re}, last;
+	std::vector<std::string> tokens{ first, last };
+	for (auto& t : tokens) {
+		std::for_each(t.begin(), t.end(), [](char& c) {
+			c = ::tolower(c);
+		});
+		cout << t<<std::endl;
 	}
-	std::ofstream fr("rezultatai.txt");
-	fr << "| " << std::left << std::setw(15) << "Zodis" << "|" << std::setw(5) << "Kartai" << "| " << std::setw(50) << "Eil.numeris" << std::endl;
-	for (auto &i : zodziai) {
-		if (i.vardas == "" || sarasas.count(i.vardas)<2) continue;
-		fr << "| " <<std::left <<std::setw(15) << i.vardas << "| " << std::setw(5) << sarasas.count(i.vardas) << "| ";
-		for (auto y : i.eilutes) {
-			fr << y << " ";
-		}
-		fr << std::endl;
-	}
-	fr.close();
+
 	return 0;
 }
