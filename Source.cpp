@@ -69,10 +69,10 @@ int main() {
 		}
 	}
 	std::ofstream fr("rezultatai.txt");
-	fr << "|" << std::setw(15) << "Zodis" << "|" << "Kartai" << std::setw(30) << "Eil.numeris" << std::setw(20) << " | " << std::endl;
+	fr << "| " << std::left << std::setw(15) << "Zodis" << "|" << std::setw(5) << "Kartai" << "| " << std::setw(50) << "Eil.numeris" << std::endl;
 	for (auto &i : zodziai) {
 		if (i.vardas == "" || sarasas.count(i.vardas)<2) continue;
-		fr << "| " <<std::left <<std::setw(15) << i.vardas << "|" << std::setw(5) << sarasas.count(i.vardas) << "|";
+		fr << "| " <<std::left <<std::setw(15) << i.vardas << "| " << std::setw(5) << sarasas.count(i.vardas) << "| ";
 		for (auto y : i.eilutes) {
 			fr << y << " ";
 		}
